@@ -2,13 +2,17 @@ import MobileNabBar from "@/components/ui/MobileNabBar";
 import SideBar from "@/components/ui/sideBar";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 // import "../globals.css"
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   const loggedIn = await getLoggedInUser();
+  if (!loggedIn) redirect("/sign-in");
+
   return (
     <main className="flex h-screen w-full font-inter">
       <SideBar user={loggedIn} />
