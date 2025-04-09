@@ -31,25 +31,20 @@ const AuthForm = ({ type }: { type: string }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      // sign up with Appwrite /create plaid token
-      // if (type === "sign-up") {
-      //   const newUser = await signUp(data);
-      //   setUser(newUser);
-      // }
-
       if (type === "sign-up") {
         const newUser = await signUp({
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          address1: data.address1!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postalCode!,
+          dateOfBirth: data.dateOfBirth!,
+          ssn: data.ssn!,
           email: data.email!,
-          password: data.password!,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          address1: data.address1,
-          city: data.city,
-          state: data.state,
-          postalCode: data.postalCode,
-          dateOfBirth: data.dateOfBirth,
-          ssn: data.ssn,
+          password: data.password,
         });
+
         setUser(newUser);
       }
 
@@ -89,11 +84,11 @@ const AuthForm = ({ type }: { type: string }) => {
           </p>
         </div>
       </header>
-      {/* {user ? ( */}
+      {user ? (
         <div className="flex flex-col gap-4">
-          <PlaidLink user={user} varient="primary" />
+          <PlaidLink user={user} variant="primary" />
         </div>
-      {/* ) : ( */}
+      ): (
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -201,8 +196,9 @@ const AuthForm = ({ type }: { type: string }) => {
             </form>
           </Form>
         </>
-      {/* )} */}
+      )}
     </section>
+    
   );
 };
 

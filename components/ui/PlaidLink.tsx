@@ -7,22 +7,23 @@ import {
   PlaidLinkOptions,
   usePlaidLink,
 } from "react-plaid-link";
-import { createLinkToken } from "@/lib/actions/user.actions";
+import { createLinkToken, exchangePublicToken } from "@/lib/actions/user.actions";
 
 const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
   const [token, setToken] = useState(null);
   const router = useRouter();
 
   //EXCHANGE THE PUBLIC TOKEN SO I CSN LINK TO BANK ACCOUNT
-  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token: string) => {
-    // await exchangePublicToken({
-    //   publicToken: public_token,
-    //   user,
-    // })
 
+  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token: string) => {
+    await exchangePublicToken({
+      publicToken: public_token,
+      user,
+    })
     //THEN AFTER EXCHANGE THE PUBLIC TOKEN I REDIRECT TO THE DASHBOARD WHICH MEAN SUCCESS LINKED THE BANK ACCOUNT
     router.push('/');
   }, [user])
+  
   
   //TO FETCH THE TOKEN ON TIME
   useEffect(() => {
@@ -43,13 +44,13 @@ const PlaidLink = ({ user, variant }: PlaidLinkProps) => {
   return (
     <>
       {variant === "primary" ? (
-        <Button
+        <button
           className="plaidlink-primary"
           onClick={() => open()}
           disabled={!ready}
         >
           Connect Bank Account
-        </Button>
+        </button>
       ) : variant === "ghost" ? (
         <Button className="plaidlink-ghost">Connect Bank Account</Button>
       ) : (

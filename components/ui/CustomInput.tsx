@@ -1,11 +1,17 @@
 import React from "react";
-import { FormControl, FormField, FormLabel, FormMessage } from "./form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Control, FieldPath } from "react-hook-form";
 import { z } from "zod";
 import { authFormSchema } from "@/lib/utils";
 import { Input } from "@/components/ui/input"
 
-const formSchema = authFormSchema("sign-up");
+const formSchema = authFormSchema('sign-up')
 
 interface CustomInput {
   control: Control<z.infer<typeof formSchema>>;
@@ -14,26 +20,26 @@ interface CustomInput {
   placeholder: string;
 }
 
-const CustomInput = ({ control, name, label, placeholder }: CustomInput) => {
+const CustomInput = ({ label, name, placeholder, control }: CustomInput) => {
+  const uniqueId = `${name}-form-item`; // Generate unique ID using the field name
+  
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="form-item">
-          <FormLabel className="form-label">{label}</FormLabel>
-          <div className=" flex flex-col">
-            <FormControl>
-              <Input
-                placeholder={placeholder}
-                className="input-class"
-                {...field}
-                type={name === "password" ? "password" : "text"}
-              />
-            </FormControl>
-            <FormMessage className="form-message mt-2" />
-          </div>
-        </div>
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input 
+              placeholder={placeholder} 
+              {...field} 
+              id={uniqueId}
+              className="input-class"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
       )}
     />
   );
